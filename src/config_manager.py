@@ -11,9 +11,10 @@ if not os.path.isdir("%s/src" % (PARENT_DIR)):
     PARENT_DIR = os.getcwd()
 
 class http_sampler_proxy(object):
-    def __init__(self, path, method):
+    def __init__(self, path, method, map={}):
         self.path = path
         self.method = method
+        self.header_map = map
 
 class config_mgr(object):
     def __init__(self, filename=None):
@@ -55,8 +56,9 @@ class config_mgr(object):
                 hsp = http_sampler_proxy(path, method)
                 self.http_sampler_proxies.append(hsp)
 
-            self.request_headers = {}
+            hdr_count = 0
             for conf in root.iter('HeaderManager'):
+                map = {}
                 for ele in conf.iter('elementProp'):
                     key = None
                     val = None
@@ -67,9 +69,12 @@ class config_mgr(object):
                             val = str.text
                         else:
                             pass
+                    map[key] = val
 
-                    self.request_headers[key] = val
+                if hdr_count < len(self.http_sampler_proxies):
+                    self.http_sampler_proxies[hdr_count].map = map
 
+                hdr_count += 1
 
         except Exception as e:
             print e
@@ -83,6 +88,4 @@ class config_mgr(object):
         for i in self.http_sampler_proxies:
             print "HTTP Sampler Path:"   + i.path
             print "HTTP Sampler Method:" + i.method
-
-        for key in self.request_headers.keys():
-            print "Header: %s, Value: %s" % (key, self.request_headers[key])
+            print "Header Map " + str(i.map)
