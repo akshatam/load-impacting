@@ -11,9 +11,10 @@ if not os.path.isdir("%s/src" % (PARENT_DIR)):
     PARENT_DIR = os.getcwd()
 
 class http_sampler_proxy(object):
-    def __init__(self, path, method, map={}):
+    def __init__(self, path, method, domain, map={}):
         self.path = path
         self.method = method
+        self.domain = domain
         self.header_map = map
 
 class config_mgr(object):
@@ -37,7 +38,14 @@ class config_mgr(object):
                     self.num_threads = int(txt)
                 elif a == 'ThreadGroup.ramp_time':
                     self.ramp_time = int(txt)
-                elif a == 'HTTPSampler.domain':
+                else:
+                    pass
+
+            configele = root.iter('ConfigTestElement').next()
+            for conf in configele.iter('stringProp'):
+                a = conf.get('name')
+                txt = conf.text
+                if a == 'HTTPSampler.domain':
                     self.master_httpsampler_domain = txt
                 elif a == 'HTTPSampler.concurrentPool':
                     self.httpsampler_concurrent_pool = int(txt)
@@ -48,12 +56,19 @@ class config_mgr(object):
             for conf in root.iter('HTTPSamplerProxy'):
                 path = None
                 method = None
+                domain = None
                 for str in conf.iter('stringProp'):
                     if str.get('name') == 'HTTPSampler.path':
                         path = str.text
                     elif str.get('name') == 'HTTPSampler.method':
                         method = str.text
-                hsp = http_sampler_proxy(path, method)
+                    if str.get('name') == 'HTTPSampler.domain':
+                        domain = str.text
+
+                if domain is None:
+                    domain = self.master_httpsampler_domain
+
+                hsp = http_sampler_proxy(path, method, domain)
                 self.http_sampler_proxies.append(hsp)
 
             hdr_count = 0
