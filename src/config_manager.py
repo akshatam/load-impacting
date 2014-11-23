@@ -38,7 +38,7 @@ class config_mgr(object):
                 elif a == 'ThreadGroup.ramp_time':
                     self.ramp_time = int(txt)
                 elif a == 'HTTPSampler.domain':
-                    self.httpsampler_domain = txt
+                    self.master_httpsampler_domain = txt
                 elif a == 'HTTPSampler.concurrentPool':
                     self.httpsampler_concurrent_pool = int(txt)
                 else:
@@ -82,7 +82,7 @@ class config_mgr(object):
     def print_config(self):
         print "ThreadGroup.num_threads:"    + str(self.num_threads)
         print "ThreadGroup.ramp_time:"      + str(self.ramp_time)
-        print "ThreadGroup.domain:"         + str(self.httpsampler_domain)
+        print "ThreadGroup.domain:"         + str(self.master_httpsampler_domain)
         print "ThreadGroup.concurrent_pool" + str(self.httpsampler_concurrent_pool)
 
         for i in self.http_sampler_proxies:
