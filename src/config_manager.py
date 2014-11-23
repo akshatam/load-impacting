@@ -55,6 +55,22 @@ class config_mgr(object):
                 hsp = http_sampler_proxy(path, method)
                 self.http_sampler_proxies.append(hsp)
 
+            self.request_headers = {}
+            for conf in root.iter('HeaderManager'):
+                for ele in conf.iter('elementProp'):
+                    key = None
+                    val = None
+                    for str in ele.iter('stringProp'):
+                        if str.get('name') == 'Header.name':
+                            key = str.text
+                        elif str.get('name') == 'Header.value':
+                            val = str.text
+                        else:
+                            pass
+
+                    self.request_headers[key] = val
+
+
         except Exception as e:
             print e
 
@@ -67,3 +83,6 @@ class config_mgr(object):
         for i in self.http_sampler_proxies:
             print "HTTP Sampler Path:"   + i.path
             print "HTTP Sampler Method:" + i.method
+
+        for key in self.request_headers.keys():
+            print "Header: %s, Value: %s" % (key, self.request_headers[key])
