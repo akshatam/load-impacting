@@ -23,7 +23,7 @@ class usr_scenario_mgr(object):
 
                 headers = headers + "}"
 
-                self.file.write("\t{\"%s\", \"http://%s/%s\", %s\n" % (sp.method, sp.domain, sp.path, headers))
+                self.file.write("\t{\"%s\", \"http://%s/%s\", nil, %s},\n" % (sp.method, sp.domain, sp.path, headers))
                 if batch_size_counter == batch_size:
                     self.file.write("})\n")
                     self.file.write("client.sleep(%d)\n" % sleep_time)
@@ -32,11 +32,12 @@ class usr_scenario_mgr(object):
                     batch_size_counter = 0
 
                 if batch_size_counter != batch_size and idx == len(configuration.http_sampler_proxies) - 1:
-                    self.file.write("}),\n")
+                    self.file.write("})\n")
 
 
                 batch_size_counter += 1
-
+            self.file.close()
+            self.file = None
         except Exception as e:
             print e
 
