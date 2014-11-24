@@ -4,7 +4,7 @@ import client_manager
 import user_scenario_manager
 
 def main():
-    c = config_manager.config_mgr()
+    c = config_manager.config_mgr() #Can be instantiated with a FilePath.
     c.print_config()
     path = "%s/target/tmp.txt" % (config_manager.PARENT_DIR)
     usm = user_scenario_manager.usr_scenario_mgr(path, c, 2)
