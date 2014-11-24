@@ -10,7 +10,7 @@ NUMBER_OF_ESSENTIAL_PKGS = 2
 PARENT_DIR = os.getcwd()
 
 
-def main():
+def main(argv):
     system = platform.system()
     all_packages = pip.get_installed_distributions()
     req_pkg_found = 0
@@ -18,13 +18,25 @@ def main():
         if 'loadimpact' in str(pkg) or 'requests' in str(pkg):
             req_pkg_found += 1
 
-    os.makedirs("%s/target" % PARENT_DIR)
+    if not os.path.isdir("%s/target" % PARENT_DIR):
+        os.makedirs("%s/target" % PARENT_DIR)
+
     print "Installing Credential File...my.token"
-    password = raw_input()
+    password = None
+    if argv[1] == "--password":
+        password = argv[2]
+
+    print password
+    if password is None:
+        print "Enter the Password.."
+        password = raw_input()
     try:
+        if os.path.isfile('my.token'):
+            os.remove('my.token')
         with ZipFile('my.zip') as zf:
             zf.extractall(pwd=password)
-        os.rename('my.token', "%s/resources/tokens/my.token")
+        os.remove("%s/resources/tokens/my.token" % PARENT_DIR)
+        os.rename('my.token', "%s/resources/tokens/my.token" % PARENT_DIR)
     except Exception as e:
         print e
         print "Hint: Ask Password."
@@ -46,4 +58,4 @@ def main():
     print "ALL Tests PASSED, Feel free to use the system, %s/src/pilot.py can be used as reference..." % PARENT_DIR
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
