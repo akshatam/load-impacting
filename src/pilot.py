@@ -10,7 +10,6 @@ def main():
     usm = user_scenario_manager.usr_scenario_mgr(path, c, 2)
     loadscript = open(path, "r").read()
     client = client_manager.get_client('my')
-    print client
     name = "UserScenario-%s" % time.time()
     user_scenario = client.create_user_scenario({
         'name' : name,
