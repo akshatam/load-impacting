@@ -10,7 +10,7 @@ This is a GIT based repository, and there is a Install script at the Root Level.
 Please run that before tweaking the application. The Install Script makes sure, all dependencies are met,
 all required files to run the test are in place.
 
-### JMETER Test file at {PROCJECT_ROOT}/resources/jmeter_test.xml & ./tokens/my.token
+### JMETER Test file at {PROCJECT_ROOT}/resources/jmeter_test.xml
 This is a sample file provided by the LoadImpact team and should not be altered, as the Test depend on values parsed
 from this.
 You can of-course use a different file, refer to pilot.py in "src/"
@@ -28,6 +28,6 @@ Install script as a valid token file.
 
 Ask, amar.akshat@gmail.com for the password to Zip File.
 *Please Remember*, this is only for test, and if you want to use the Library as such, just put your own token file in
- ./resources/tokens/ as "<yourname>.token" and instantiate the Client with yourname
- client = client_manager.get_client('<yourname>')
+ ./resources/tokens/ as "yourname".token" and instantiate the Client with yourname
+ client = client_manager.get_client('yourname')
  
