@@ -21,7 +21,7 @@ The config_mgr() Class can be instantiated with a file name (path), so feel free
 ## Credential Management
 my.token: is Author's token file, "amar.akshat@gmail.com".
 This is initially zipped with a password in the root directory, and one needs to run the Install script with the option
---password <password> to be able to use it. If you do not pass the password option, the Install script will ask for the
+--password "password" to be able to use it. If you do not pass the password option, the Install script will ask for the
 same on the runtime, please be prepared to enter that.
 The token file in resources/tokens/my.token is initially a placeholder with corrupt text, and will be replaced by the
 Install script as a valid token file.
@@ -30,4 +30,8 @@ Ask, amar.akshat@gmail.com for the password to Zip File.
 *Please Remember*, this is only for test, and if you want to use the Library as such, just put your own token file in
  ./resources/tokens/ as "yourname".token" and instantiate the Client with yourname
  client = client_manager.get_client('yourname')
- 
+
+## Testing.
+Since this is a relatively smaller application we've stuck to only Functional Testing. The test.py contains of tests for
+configuration and loadimpact functionality matter testing including validation of parsed script files. The symantic can
+be best analyzed by the server.
