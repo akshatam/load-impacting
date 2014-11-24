@@ -3,7 +3,6 @@ import config_manager
 import client_manager
 import user_scenario_manager
 
-
 def main():
     c = config_manager.config_mgr()
     c.print_config()
