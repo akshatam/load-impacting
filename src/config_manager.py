@@ -1,7 +1,6 @@
 __author__ = 'Amar'
 
 import os
-import sys
 import xml.etree.ElementTree as ET
 
 PARENT_DIR = os.getcwd()

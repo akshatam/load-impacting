@@ -1,6 +1,5 @@
 __author__ = 'Amar'
 import config_manager
-import user_scenario_manager
 import time
 import loadimpact
 import os

@@ -1,6 +1,3 @@
-import os
-import sys
-import loadimpact
 import time
 import config_manager
 import client_manager
@@ -21,9 +18,10 @@ def main():
         'load_script':loadscript
     })
     print user_scenario
-    #client_manager.validate_user_scenario(user_scenario)
+    client_manager.validate_user_scenario(user_scenario)
     tc = client_manager.test_scenario_upload(c, client, [user_scenario])
-    print tc
+    if tc is None:
+        print "Couldn't Create the Test Scenario.."
 
 if __name__ == '__main__':
     main()

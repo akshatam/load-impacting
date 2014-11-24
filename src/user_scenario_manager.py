@@ -1,9 +1,5 @@
 __author__ = 'Amar'
 
-import loadimpact
-import os
-import config_manager
-
 class usr_scenario_mgr(object):
     def __init__(self, path, configuration, batch_size=2, sleep_time=15):
         self.file = None
