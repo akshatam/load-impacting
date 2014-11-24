@@ -7,7 +7,7 @@ import os
 def get_client(name):
     tokfile = "%s/resources/tokens/%s.token" % (config_manager.PARENT_DIR, name)
     if not os.path.isfile(tokfile):
-        raise('File Not Found')
+        raise("%s: File Not Found" % (tokfile))
     token = open(tokfile, "r").read()
     client = client = loadimpact.ApiTokenClient(api_token=token)
     return client
