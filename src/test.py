@@ -16,7 +16,7 @@ def test_config():
 
 def test_usn_creation():
     load_script = """
-    local response = http.get("http://example.com')
+    local response = http.get("http://example.com")
     log.info("Load time: "..response.total_load_time.."s")
     client.sleep(5)
     """
@@ -27,6 +27,7 @@ def test_usn_creation():
         'load_script': load_script
     })
     assert (user_scenario.id > 0), "UserScenarioCreationError, Invalid ID obtained"
+    client_manager.validate_user_scenario(user_scenario)
     user_scenario.delete_with_id(client, user_scenario.id)
 
 
