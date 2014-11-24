@@ -15,12 +15,15 @@ def main():
     loadscript = open(path, "r").read()
     client = client_manager.get_client('my')
     print client
-    name = "Test-%s" % time.time()
+    name = "UserScenario-%s" % time.time()
     user_scenario = client.create_user_scenario({
         'name' : name,
         'load_script':loadscript
     })
-    client_manager.validate_user_scenario(user_scenario)
+    print user_scenario
+    #client_manager.validate_user_scenario(user_scenario)
+    tc = client_manager.test_scenario_upload(c, client, [user_scenario])
+    print tc
 
 if __name__ == '__main__':
     main()
