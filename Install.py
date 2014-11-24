@@ -4,6 +4,7 @@ import platform
 import pip
 import subprocess
 import sys
+from zipfile import ZipFile
 
 NUMBER_OF_ESSENTIAL_PKGS = 2
 PARENT_DIR = os.getcwd()
@@ -17,6 +18,17 @@ def main():
         if 'loadimpact' in str(pkg) or 'requests' in str(pkg):
             req_pkg_found += 1
 
+    os.makedirs("%s/target" % PARENT_DIR)
+    print "Installing Credential File...my.token"
+    password = raw_input()
+    try:
+        with ZipFile('my.zip') as zf:
+            zf.extractall(pwd=password)
+        os.rename('my.token', "%s/resources/tokens/my.token")
+    except Exception as e:
+        print e
+        print "Hint: Ask Password."
+        sys.exit(-1)
     assert(req_pkg_found == NUMBER_OF_ESSENTIAL_PKGS), "You must have loadimpact SDK and requests."
     assert(os.path.isdir("%s/src" % PARENT_DIR)), "Should be run from Project Root"
     test_config_file = "%s/resources/jmeter_test.xml" % PARENT_DIR
