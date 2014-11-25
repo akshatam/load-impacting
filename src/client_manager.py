@@ -2,13 +2,11 @@ __author__ = 'Amar'
 import config_manager
 import time
 import loadimpact
-import os
 
-def get_client(name):
-    tokfile = "%s/resources/tokens/%s.token" % (config_manager.PARENT_DIR, name)
-    if not os.path.isfile(tokfile):
-        raise("%s: File Not Found" % (tokfile))
-    token = open(tokfile, "r").read()
+
+TESTURL = 'https://api.loadimpact.com/v2/test-configs'
+
+def get_client(token):
     client = client = loadimpact.ApiTokenClient(api_token=token)
     return client
 
@@ -33,34 +31,36 @@ def validate_user_scenario(user_scenario):
 def test_scenario_upload(config, client, user_scenarios, loadzone=loadimpact.LoadZone.AMAZON_JP_TOKYO):
     name = "TestConfig-%s" % time.time()
     url = "http://%s" % config.master_httpsampler_domain
-    load_schedule = [{"users": config.num_threads, "duration": config.ramp_time}]
     usns = []
     for usn in user_scenarios:
         a = {"user_scenario_id":usn.id, "percent":100}
         usns.append(a)
 
-    ldzone = loadimpact.LoadZone.name_to_id(loadzone)
-    tracks = [{
-        "clips" : usns,
-        "loadzone":ldzone,
-    }]
     config1 = None
-    try:
-        config1 = client.create_test_config({
-            'name': 'Amartest_configuration',
-            'url': 'http://test.loadimpact.com/',
-            'config': {
-                "load_schedule": [{"users": 10, "duration": 10}],
-                "tracks": [{
-                    "clips": [{
-                        "user_scenario_id": user_scenarios[0].id, "percent": 100
-                        }],
-                    "loadzone": loadimpact.LoadZone.name_to_id(loadzone)
-                    }]
+    config.master_httpsampler_domain = "http://"+config.master_httpsampler_domain + "/"
+
+    data_map = {
+        "config": {
+            "load_schedule": [
+                {
+                    "duration": 2,
+                    "users": 5
                 }
-            })
-    except loadimpact.exceptions.ClientError as e:
-        print e.response, e.message, e.args
+            ],
+            "tracks": [
+                {
+                    "clips": usns,
+                    "loadzone": loadzone
+                }
+            ],
+            "user_type": "sbu"
+        },
+        "name": name,
+        "url": url
+    }
+    import json, requests
+    data = json.dumps(data_map)
+    r = requests.post(TESTURL, data, auth=(config.token, ''))
 
-    return config1
-
+    print r.json
+    return r.status_code

@@ -17,7 +17,7 @@ class http_sampler_proxy(object):
         self.header_map = map
 
 class config_mgr(object):
-    def __init__(self, filename=None):
+    def __init__(self, user, filename=None):
         if filename == None:
             print "Using Default config JMX file"
             filename = "%s/resources/jmeter_test.xml" % (PARENT_DIR)
@@ -29,6 +29,12 @@ class config_mgr(object):
             root = tree.getroot()
             ele = root.iter('ThreadGroup').next()
             self.testname = ele.attrib['testname']
+
+            tokfile = "%s/resources/tokens/%s.token" % (PARENT_DIR, user)
+            if not os.path.isfile(tokfile):
+                raise("%s: File Not Found" % (tokfile))
+            token = open(tokfile, "r").read()
+            self.token = token
 
             for conf in root.iter('stringProp'):
                 a = conf.get('name')
